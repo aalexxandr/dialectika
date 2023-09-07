@@ -1,6 +1,6 @@
 import UserModel from '../models/user-model';
 import bcrypt from 'bcrypt';
-import uuid from 'uuid';
+import { v4 } from 'uuid';
 import MailService from './mail-service';
 import { IUser } from './types';
 import tokenService from './token-service';
@@ -13,8 +13,9 @@ class UserService {
 			throw new Error('Email is already in use');
 		}
 
-		const hashPassword = bcrypt.hash(password, 3);
-		const activationLink = uuid.v4();
+		const hashPassword = await bcrypt.hash(password, 3);
+
+		const activationLink = v4();
 
 		await MailService.sendActivationMail(email, activationLink);
 
